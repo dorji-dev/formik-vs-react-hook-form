@@ -13,12 +13,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { SelectSingleEventHandler } from "react-day-picker";
+import { FloatingLabel } from "./floating-input";
 
 interface DatePickerSingleProps {
   onSelect: (date: Date) => void;
   selectedDate?: Date;
   placeholder?: string;
   onBlur?: () => void;
+  floatingLabel?: string;
 }
 
 export function DatePickerSingle({
@@ -26,6 +28,7 @@ export function DatePickerSingle({
   selectedDate,
   placeholder,
   onBlur,
+  floatingLabel,
 }: DatePickerSingleProps) {
   const triggerRef = React.useRef<HTMLButtonElement | null>(null);
   const onDateSelect: SelectSingleEventHandler = (date) => {
@@ -33,22 +36,23 @@ export function DatePickerSingle({
     triggerRef.current?.click();
   };
   return (
-    <Popover onOpenChange={(value) => !value && onBlur()}>
+    <Popover onOpenChange={(value) => !value && onBlur && onBlur()}>
       <PopoverTrigger asChild>
         <Button
           ref={triggerRef}
           variant={"outline"}
           className={cn(
-            "w-full justify-start text-left font-normal",
+            "w-full justify-start text-left font-normal relative hover:bg-transparent hover:border-primary",
             !selectedDate && "text-muted-foreground"
           )}
         >
-          <CalendarIcon className="mr-2 h-4 w-4" />
           {selectedDate ? (
             format(selectedDate, "PPP")
           ) : (
             <span>{placeholder ?? "Pick a date"} </span>
           )}
+          <CalendarIcon className="h-[14px] w-[14px] ml-auto" />
+          {floatingLabel && <FloatingLabel>{floatingLabel}</FloatingLabel>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

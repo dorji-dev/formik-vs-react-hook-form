@@ -1,8 +1,8 @@
 import { Controller, useFormContext } from "react-hook-form";
 import { DatePickerSingle } from "../ui/date-picker-single";
-import { Input } from "../ui/input";
 import { StepperFormValues } from "@/types/hook-stepper";
 import { validateEmail } from "@/lib/utils";
+import { FloatingLabelInput } from "../ui/floating-input";
 
 const ApplicantInfo = () => {
   const {
@@ -15,8 +15,9 @@ const ApplicantInfo = () => {
     <div>
       <h4 className="stepper_step_heading">Applicant Information</h4>
       <div className="stepper_step_container">
-        <Input
-          placeholder="Full name"
+        <FloatingLabelInput
+          id="fullName"
+          label="Full name"
           {...register("fullName", { required: "Required" })}
           error={errors.fullName?.message}
         />
@@ -30,10 +31,11 @@ const ApplicantInfo = () => {
           }) => (
             <div>
               <DatePickerSingle
-                placeholder="Date of birth"
+                placeholder="Pick a date"
                 onSelect={onChange}
                 selectedDate={value ? new Date(value) : null}
                 onBlur={onBlur}
+                floatingLabel="Date of birth"
               />
               {invalid && (
                 <span className="text-destructive block !mt-[5px] text-[12px]">
@@ -43,8 +45,9 @@ const ApplicantInfo = () => {
             </div>
           )}
         />
-        <Input
-          placeholder="Email"
+        <FloatingLabelInput
+          id="email"
+          label="Email"
           type="email"
           {...register("email", {
             required: "Required",
@@ -52,9 +55,10 @@ const ApplicantInfo = () => {
           })}
           error={errors.email?.message}
         />
-        <Input
-          placeholder="Phone"
-          type="number"
+        <FloatingLabelInput
+          id="phone"
+          label="Phone"
+          type="tel"
           {...register("phone", { required: "Required" })}
           error={errors.phone?.message}
         />

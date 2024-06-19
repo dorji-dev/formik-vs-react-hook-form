@@ -29,4 +29,8 @@ export const composeFormValidation = (
     );
 };
 
-
+export abstract class FormValidators {
+  static required(value: any) {
+    return value ? undefined : "Required";
+  }
+}

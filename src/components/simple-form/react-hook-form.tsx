@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -11,14 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { validateEmail } from "@/lib/utils";
 import {
   Controller,
   SubmitHandler,
   useFieldArray,
-  useForm, 
-  useWatch,
+  useForm,
 } from "react-hook-form";
+import { FloatingLabelInput } from "../ui/floating-input";
 
 interface HookFormData {
   firstName: string;
@@ -65,7 +63,7 @@ const SimpleFormWithValidation = () => {
       className="space-y-[20px]"
       noValidate
     >
-      <Input
+      <FloatingLabelInput
         placeholder="Email"
         type="email"
         {...register("email", {
@@ -106,7 +104,7 @@ const SimpleFormWithValidation = () => {
         )}
       />
 
-      <Input
+      <FloatingLabelInput
         placeholder="First name"
         type="text"
         {...register("firstName", {
@@ -115,7 +113,7 @@ const SimpleFormWithValidation = () => {
         error={errors.firstName?.message}
       />
 
-      <Input
+      <FloatingLabelInput
         placeholder="Last name"
         type="text"
         {...register("lastName", {
@@ -175,7 +173,7 @@ const DynamicForm = () => {
           key={field.id}
           className="space-y-[20px] p-[20px] border rounded-[10px] border-foreground/80"
         >
-          <Input
+          <FloatingLabelInput
             {...register(`users.${index}.name`, { required: "Required" })}
             placeholder="Name"
             error={errors.users?.[index]?.name?.message}

@@ -1,6 +1,5 @@
 import { StepperFormValues } from "@/types/hook-stepper";
 import { Controller, useFormContext } from "react-hook-form";
-import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
@@ -10,10 +9,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { FloatingLabel, FloatingLabelInput } from "../ui/floating-input";
 
 const EmploymentInfo = () => {
   const {
     control,
+    trigger,
     formState: { errors },
     register,
   } = useFormContext<StepperFormValues>();
@@ -32,12 +33,18 @@ const EmploymentInfo = () => {
           }) => (
             <div>
               <Select
-                onValueChange={onChange}
+                onValueChange={(value) => {
+                  onChange(value);
+                  trigger(["employerName", "jobTitle", "annualIncome"]);
+                }}
                 value={value}
                 onOpenChange={(value) => !value && onBlur()}
               >
-                <SelectTrigger name="employmentStatus">
-                  <SelectValue placeholder="Employment status" />
+                <SelectTrigger
+                  name="employmentStatus"
+                  floatingLabel="Employment status"
+                >
+                  <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 {invalid && (
                   <span className="text-destructive block !mt-[5px] text-[12px]">
@@ -56,23 +63,54 @@ const EmploymentInfo = () => {
             </div>
           )}
         />
-        <Input
-          placeholder="Employer name"
+        <FloatingLabelInput
+          id="employerName"
+          label="Employer name"
           type="text"
-          {...register("employerName", { required: "Required" })}
+          {...register("employerName", {
+            validate: (employerName, formValues) => {
+              if (
+                (formValues.employmentStatus === "employed" ||
+                  formValues.employmentStatus === "self-employed") &&
+                !employerName
+              ) {
+                return "Required";
+              }
+            },
+          })}
           error={errors.employerName?.message}
         />
-        <Input
-          placeholder="Job title"
+        <FloatingLabelInput
+          id="jobTitle"
+          label="Job title"
           type="text"
-          {...register("jobTitle", { required: "Required" })}
+          {...register("jobTitle", {
+            validate: (jobTitle, formValues) => {
+              if (
+                (formValues.employmentStatus === "employed" ||
+                  formValues.employmentStatus === "self-employed") &&
+                !jobTitle
+              ) {
+                return "Required";
+              }
+            },
+          })}
           error={errors.jobTitle?.message}
         />
-        <Input
-          placeholder="Annual income"
+        <FloatingLabelInput
+          id="annualIncome"
+          label="Annual income"
           type="number"
           {...register("annualIncome", {
-            required: "Required",
+            validate: (annualIncome, formValues) => {
+              if (
+                (formValues.employmentStatus === "employed" ||
+                  formValues.employmentStatus === "self-employed") &&
+                !annualIncome
+              ) {
+                return "Required";
+              }
+            },
             valueAsNumber: true,
           })}
           error={errors.annualIncome?.message}

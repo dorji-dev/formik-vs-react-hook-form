@@ -44,3 +44,8 @@
     @apply text-center text-foreground/70 mt-[30px];
   }
 }
+
+/* Remove input background on chrome autocomplete */
+input:-webkit-autofill { 
+  -webkit-background-clip: text;
+}

@@ -1,7 +1,6 @@
 import { StepperFormValues } from "@/types/hook-stepper";
 import { Controller, useFormContext } from "react-hook-form";
 import { DatePickerSingle } from "../ui/date-picker-single";
-import { Input } from "../ui/input";
 import {
   Select,
   SelectContent,
@@ -11,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { FloatingLabelInput } from "../ui/floating-input";
 
 const LoanDetails = () => {
   const {
@@ -23,9 +23,10 @@ const LoanDetails = () => {
     <div>
       <h4 className="stepper_step_heading">Loan Details</h4>
       <div className="stepper_step_container">
-        <Input
+        <FloatingLabelInput
+          id="loanAmount"
+          label="Loan Amount"
           type="number"
-          placeholder="Loan amount"
           {...register("loanAmount", {
             required: "Required",
             valueAsNumber: true,
@@ -46,8 +47,8 @@ const LoanDetails = () => {
                 value={value}
                 onOpenChange={(value) => !value && onBlur()}
               >
-                <SelectTrigger>
-                  <SelectValue placeholder="Loan purpose" />
+                <SelectTrigger floatingLabel="Loan purpose">
+                  <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 {invalid && (
                   <span className="text-destructive block !mt-[5px] text-[12px]">
@@ -68,9 +69,10 @@ const LoanDetails = () => {
             </div>
           )}
         />
-        <Input
+        <FloatingLabelInput
+          id="repaymentTerms"
+          label="Repayment Terms(months)"
           type="number"
-          placeholder="Repayment terms(months)"
           {...register("repaymentTerms", {
             required: "Required",
             valueAsNumber: true,
@@ -89,8 +91,9 @@ const LoanDetails = () => {
               <DatePickerSingle
                 selectedDate={value ? new Date(value) : null}
                 onSelect={onChange}
-                placeholder="Preferred Repayment Start Date"
+                placeholder="Pick a date"
                 onBlur={onBlur}
+                floatingLabel="Preferred Repayment Start Date"
               />
               {invalid && (
                 <span className="text-destructive block !mt-[5px] text-[12px]">

@@ -1,19 +1,19 @@
 "use client";
 
-import { FormProvider, useForm } from "react-hook-form";
-import AddressInfo from "./address-info";
+import React, { useEffect, useState } from "react";
+import StepperIndicator from "../shared/stepper-indicator";
 import ApplicantInfo from "./applicant-info";
+import AddressInfo from "./address-info";
 import EmploymentInfo from "./employment-info";
 import FinancialInfo from "./financial-info";
 import LoanDetails from "./loan-details";
-import { StepperFormKeysType, StepperFormValues } from "@/types/hook-stepper";
-import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import StepperIndicator from "../shared/stepper-indicator";
+import { Formik } from "formik";
+import { StepperFormValues } from "@/types/hook-stepper";
+import FormActions from "./form-actions";
 import { toast } from "../ui/use-toast";
 import { StepperFormKeys } from "@/lib/constants/hook-stepper-constants";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
 
 function getStepContent(step: number) {
   switch (step) {
@@ -32,29 +32,28 @@ function getStepContent(step: number) {
   }
 }
 
-const HookMultiStepForm = () => {
+const FormikMultiStepForm = () => {
   const [activeStep, setActiveStep] = useState(1);
-  const [erroredInputName, setErroredInputName] = useState("");
-  const methods = useForm<StepperFormValues>({ mode: "all" });
-
-  const {
-    trigger,
-    handleSubmit,
-    setError,
-    formState: { isSubmitting, errors },
-  } = methods;
+  const [fieldError, setFieldError] = useState<{
+    message: string;
+    fieldName: string;
+  }>(null);
+  const [formError, setFormError] = useState("");
 
   // focus errored input on submit
   useEffect(() => {
     const erroredInputElement =
-      document.getElementsByName(erroredInputName)?.[0];
+      fieldError && document.getElementsByName(fieldError.fieldName)?.[0];
     if (erroredInputElement instanceof HTMLInputElement) {
       erroredInputElement.focus();
-      setErroredInputName("");
+      setFieldError(null);
     }
-  }, [erroredInputName]);
+  }, [fieldError]);
 
   const onSubmit = async (formData: StepperFormValues) => {
+    // reset field and form error if any
+    setFieldError(null);
+    setFormError("");
     // console.log({ formData });
     // simulate api call
     await new Promise((resolve, reject) => {
@@ -92,69 +91,75 @@ const HookMultiStepForm = () => {
           }
           // set active step and error
           setActiveStep(erroredStep);
-          setError(errorKey as StepperFormKeysType, {
+          setFieldError({
             message: errorMessage,
+            fieldName: errorKey,
           });
-          setErroredInputName(errorKey);
         } else {
-          setError("root.formError", {
-            message: errorMessage,
-          });
+          setFormError(errorMessage);
         }
       });
   };
 
-  const handleNext = async () => {
-    const isStepValid = await trigger(undefined, { shouldFocus: true });
-    if (isStepValid) setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const onNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const initialValues: StepperFormValues = {
+    fullName: "",
+    dob: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    state: "",
+    zipCode: "",
+    employmentStatus: "",
+    employerName: "",
+    jobTitle: "",
+    annualIncome: undefined,
+    loanAmount: undefined,
+    loanPurpose: "",
+    repaymentTerms: undefined,
+    repaymentStartDate: "",
+    bankName: "",
+    accountNumber: "",
+    routingNumber: "",
+    creditScore: undefined,
+  };
+
   return (
     <div>
       <StepperIndicator activeStep={activeStep} />
-      {errors.root?.formError && (
+      {formError && (
         <Alert variant="destructive" className="mt-[28px]">
           <ExclamationTriangleIcon className="h-4 w-4" />
           <AlertTitle>Form Error</AlertTitle>
-          <AlertDescription>{errors.root?.formError?.message}</AlertDescription>
+          <AlertDescription>{formError}</AlertDescription>
         </Alert>
       )}
-      <FormProvider {...methods}>
-        <form noValidate>
-          {getStepContent(activeStep)}
-          <div className="flex justify-center space-x-[20px]">
-            <Button
-              type="button"
-              className="w-[100px]"
-              variant="secondary"
-              onClick={handleBack}
-              disabled={activeStep === 1}
-            >
-              Back
-            </Button>
-            {activeStep === 5 ? (
-              <Button
-                className="w-[100px]"
-                type="button"
-                onClick={handleSubmit(onSubmit)}
-                disabled={isSubmitting}
-              >
-                Submit
-              </Button>
-            ) : (
-              <Button type="button" className="w-[100px]" onClick={handleNext}>
-                Next
-              </Button>
-            )}
-          </div>
-        </form>
-      </FormProvider>
+      <Formik initialValues={initialValues} onSubmit={onSubmit}>
+        {({ handleSubmit }) => (
+          <form noValidate>
+            {getStepContent(activeStep)}
+            <div className="flex justify-center space-x-[20px]">
+              <FormActions
+                activeStep={activeStep}
+                handleBack={handleBack}
+                onNext={onNext}
+                onSubmit={handleSubmit}
+                fieldError={fieldError}
+              />
+            </div>
+          </form>
+        )}
+      </Formik>
     </div>
   );
 };
 
-export default HookMultiStepForm;
+export default FormikMultiStepForm;

@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -13,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { composeFormValidation, validateEmail } from "@/lib/utils";
 import { Field, FieldArray, Formik, FormikErrors } from "formik";
+import { FloatingLabelInput } from "../ui/floating-input";
 
 const FormikForm = () => {
   return (
@@ -59,7 +59,7 @@ const SimpleFormWithValidation = () => {
             }, validateEmail)}
           >
             {({ field }) => (
-              <Input
+              <FloatingLabelInput
                 placeholder="Email"
                 type="email"
                 {...field}
@@ -113,7 +113,7 @@ const SimpleFormWithValidation = () => {
             }}
           >
             {({ field }) => (
-              <Input
+              <FloatingLabelInput
                 placeholder="First name"
                 type="text"
                 {...field}
@@ -130,7 +130,7 @@ const SimpleFormWithValidation = () => {
             }}
           >
             {({ field }) => (
-              <Input
+              <FloatingLabelInput
                 placeholder="Last name"
                 type="text"
                 {...field}
@@ -191,7 +191,7 @@ const DynamicForm = () => {
                         }}
                       >
                         {({ field }) => (
-                          <Input
+                          <FloatingLabelInput
                             {...field}
                             placeholder="Name"
                             error={
