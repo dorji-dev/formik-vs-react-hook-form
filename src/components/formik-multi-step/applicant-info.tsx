@@ -1,16 +1,14 @@
-import React from "react";
-import { FloatingLabelInput } from "../ui/floating-input";
-import { DatePickerSingle } from "../ui/date-picker-single";
 import { Field, useFormikContext } from "formik";
-import {
-  composeFormValidation,
-  FormValidators,
-  validateEmail,
-} from "@/lib/utils";
+import React from "react";
+
+import { FormValidators } from "@/lib/utils";
 import { StepperFormValues } from "@/types/hook-stepper";
 
+import { DatePickerSingle } from "../ui/date-picker-single";
+import { FloatingLabelInput } from "../ui/floating-input";
+
 const ApplicantInfo = () => {
-  const { setFieldValue, validateField, setTouched } =
+  const { setFieldValue, validateField, setTouched, touched } =
     useFormikContext<StepperFormValues>();
 
   return (
@@ -32,7 +30,7 @@ const ApplicantInfo = () => {
             <div>
               <DatePickerSingle
                 onBlur={async () => {
-                  await setTouched({dob: true});
+                  await setTouched({ ...touched, dob: true });
                   validateField("dob");
                 }}
                 placeholder="Pick a date"
@@ -48,13 +46,7 @@ const ApplicantInfo = () => {
             </div>
           )}
         </Field>
-        <Field
-          name="email"
-          validate={composeFormValidation(
-            FormValidators.required,
-            validateEmail
-          )}
-        >
+        <Field name="email" validate={FormValidators.required}>
           {({ field, meta }) => (
             <FloatingLabelInput
               {...field}

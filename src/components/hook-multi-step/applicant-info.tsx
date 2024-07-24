@@ -1,7 +1,9 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { DatePickerSingle } from "../ui/date-picker-single";
-import { StepperFormValues } from "@/types/hook-stepper";
+
 import { validateEmail } from "@/lib/utils";
+import { StepperFormValues } from "@/types/hook-stepper";
+
+import { DatePickerSingle } from "../ui/date-picker-single";
 import { FloatingLabelInput } from "../ui/floating-input";
 
 const ApplicantInfo = () => {

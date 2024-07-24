@@ -1,7 +1,9 @@
 import { useFormikContext } from "formik";
-import { Button } from "../ui/button";
-import { StepperFormValues } from "@/types/hook-stepper";
 import { useEffect } from "react";
+
+import { StepperFormValues } from "@/types/hook-stepper";
+
+import { Button } from "../ui/button";
 
 interface FormActionsProps {
   activeStep: number;
@@ -54,7 +56,11 @@ const FormActions = ({
     });
     const errors = await validateForm(values);
     // console.log({ errors, values });
-    !Object.keys(errors).length && onNext();
+    if (!Object.keys(errors).length) {
+      // reset touched status of input fields
+      setTouched({});
+      onNext();
+    }
   };
 
   return (

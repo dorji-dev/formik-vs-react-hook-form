@@ -1,4 +1,10 @@
+import { Field, useFormikContext } from "formik";
 import React from "react";
+
+import { FormValidators } from "@/lib/utils";
+import { StepperFormValues } from "@/types/hook-stepper";
+
+import { DatePickerSingle } from "../ui/date-picker-single";
 import { FloatingLabelInput } from "../ui/floating-input";
 import {
   Select,
@@ -9,14 +15,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { DatePickerSingle } from "../ui/date-picker-single";
-import { Field, useFormikContext } from "formik";
-import { FormValidators } from "@/lib/utils";
-import { StepperFormValues } from "@/types/hook-stepper";
 
 const LoanDetails = () => {
-  const { setFieldValue, setTouched, validateField } =
+  const { setFieldValue, setTouched, validateField, touched } =
     useFormikContext<StepperFormValues>();
+
   return (
     <div>
       <h4 className="stepper_step_heading">Loan Details</h4>
@@ -40,7 +43,7 @@ const LoanDetails = () => {
                 value={value}
                 onOpenChange={async (value) =>
                   !value &&
-                  (await setTouched({ loanPurpose: true })) &&
+                  (await setTouched({ ...touched, loanPurpose: true })) &&
                   validateField("loanPurpose")
                 }
               >
@@ -87,7 +90,7 @@ const LoanDetails = () => {
                 }
                 placeholder="Pick a date"
                 onBlur={async () => {
-                  await setTouched({ repaymentStartDate: true });
+                  await setTouched({ ...touched, repaymentStartDate: true });
                   validateField("repaymentStartDate");
                 }}
                 floatingLabel="Preferred Repayment Start Date"

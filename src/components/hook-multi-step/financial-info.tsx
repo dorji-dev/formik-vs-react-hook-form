@@ -1,5 +1,7 @@
-import { StepperFormValues } from "@/types/hook-stepper";
 import { useFormContext } from "react-hook-form";
+
+import { StepperFormValues } from "@/types/hook-stepper";
+
 import { FloatingLabelInput } from "../ui/floating-input";
 
 const FinancialInfo = () => {

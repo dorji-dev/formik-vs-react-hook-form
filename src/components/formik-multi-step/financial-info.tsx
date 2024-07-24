@@ -1,7 +1,9 @@
-import React from "react";
-import { FloatingLabelInput } from "../ui/floating-input";
 import { Field } from "formik";
+import React from "react";
+
 import { FormValidators } from "@/lib/utils";
+
+import { FloatingLabelInput } from "../ui/floating-input";
 
 const FinancialInfo = () => {
   return (

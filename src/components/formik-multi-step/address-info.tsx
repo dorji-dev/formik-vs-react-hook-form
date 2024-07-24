@@ -1,6 +1,8 @@
 import { Field } from "formik";
-import { FloatingLabelInput } from "../ui/floating-input";
+
 import { FormValidators } from "@/lib/utils";
+
+import { FloatingLabelInput } from "../ui/floating-input";
 
 const AddressInfo = () => {
   return (

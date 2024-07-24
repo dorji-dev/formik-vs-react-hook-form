@@ -1,4 +1,4 @@
-export const StepperFormKeys = {
+export const STEPPER_FORM_KEYS = {
   1: ['fullName', 'dob', 'email', 'phone'],
   2: ['address', 'city', 'state', 'zipCode'],
   3: ['employmentStatus', 'employerName', 'jobTitle', 'annualIncome'], 

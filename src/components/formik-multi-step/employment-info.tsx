@@ -1,4 +1,10 @@
+import { Field, useFormikContext } from "formik";
 import React from "react";
+
+import { FormValidators } from "@/lib/utils";
+import { StepperFormValues } from "@/types/hook-stepper";
+
+import { FloatingLabelInput } from "../ui/floating-input";
 import {
   Select,
   SelectContent,
@@ -8,10 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { FloatingLabelInput } from "../ui/floating-input";
-import { Field, useFormikContext } from "formik";
-import { composeFormValidation, FormValidators } from "@/lib/utils";
-import { StepperFormValues } from "@/types/hook-stepper";
 
 const EmploymentInfo = () => {
   const {
@@ -20,7 +22,6 @@ const EmploymentInfo = () => {
     validateField,
     setFieldValue,
     values: formValues,
-    touched,
   } = useFormikContext<StepperFormValues>();
 
   return (

@@ -1,6 +1,9 @@
-import { StepperFormValues } from "@/types/hook-stepper";
 import { Controller, useFormContext } from "react-hook-form";
+
+import { StepperFormValues } from "@/types/hook-stepper";
+
 import { DatePickerSingle } from "../ui/date-picker-single";
+import { FloatingLabelInput } from "../ui/floating-input";
 import {
   Select,
   SelectContent,
@@ -10,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { FloatingLabelInput } from "../ui/floating-input";
 
 const LoanDetails = () => {
   const {

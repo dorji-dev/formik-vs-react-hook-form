@@ -1,19 +1,21 @@
 "use client";
 
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { Formik } from "formik";
 import React, { useEffect, useState } from "react";
+
+import { STEPPER_FORM_KEYS } from "@/lib/constants/hook-stepper-constants";
+import { StepperFormValues } from "@/types/hook-stepper";
+
 import StepperIndicator from "../shared/stepper-indicator";
-import ApplicantInfo from "./applicant-info";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { toast } from "../ui/use-toast";
 import AddressInfo from "./address-info";
+import ApplicantInfo from "./applicant-info";
 import EmploymentInfo from "./employment-info";
 import FinancialInfo from "./financial-info";
-import LoanDetails from "./loan-details";
-import { Formik } from "formik";
-import { StepperFormValues } from "@/types/hook-stepper";
 import FormActions from "./form-actions";
-import { toast } from "../ui/use-toast";
-import { StepperFormKeys } from "@/lib/constants/hook-stepper-constants";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import LoanDetails from "./loan-details";
 
 function getStepContent(step: number) {
   switch (step) {
@@ -54,7 +56,7 @@ const FormikMultiStepForm = () => {
     // reset field and form error if any
     setFieldError(null);
     setFormError("");
-    // console.log({ formData });
+    console.log({ formData });
     // simulate api call
     await new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -78,13 +80,13 @@ const FormikMultiStepForm = () => {
       .catch(({ message: errorMessage, errorKey }) => {
         if (
           errorKey &&
-          Object.values(StepperFormKeys)
+          Object.values(STEPPER_FORM_KEYS)
             .flatMap((fieldNames) => fieldNames)
             .includes(errorKey)
         ) {
           let erroredStep: number;
           // get the step number based on input name
-          for (const [key, value] of Object.entries(StepperFormKeys)) {
+          for (const [key, value] of Object.entries(STEPPER_FORM_KEYS)) {
             if (value.includes(errorKey as never)) {
               erroredStep = Number(key);
             }

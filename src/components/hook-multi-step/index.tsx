@@ -1,19 +1,21 @@
 "use client";
 
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+
+import { STEPPER_FORM_KEYS } from "@/lib/constants/hook-stepper-constants";
+import { StepperFormKeysType, StepperFormValues } from "@/types/hook-stepper";
+
+import StepperIndicator from "../shared/stepper-indicator";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Button } from "../ui/button";
+import { toast } from "../ui/use-toast";
 import AddressInfo from "./address-info";
 import ApplicantInfo from "./applicant-info";
 import EmploymentInfo from "./employment-info";
 import FinancialInfo from "./financial-info";
 import LoanDetails from "./loan-details";
-import { StepperFormKeysType, StepperFormValues } from "@/types/hook-stepper";
-import { useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import StepperIndicator from "../shared/stepper-indicator";
-import { toast } from "../ui/use-toast";
-import { StepperFormKeys } from "@/lib/constants/hook-stepper-constants";
-import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
-import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
 
 function getStepContent(step: number) {
   switch (step) {
@@ -35,7 +37,9 @@ function getStepContent(step: number) {
 const HookMultiStepForm = () => {
   const [activeStep, setActiveStep] = useState(1);
   const [erroredInputName, setErroredInputName] = useState("");
-  const methods = useForm<StepperFormValues>({ mode: "all" });
+  const methods = useForm<StepperFormValues>({
+    mode: "onTouched",
+  });
 
   const {
     trigger,
@@ -55,7 +59,7 @@ const HookMultiStepForm = () => {
   }, [erroredInputName]);
 
   const onSubmit = async (formData: StepperFormValues) => {
-    // console.log({ formData });
+    console.log({ formData });
     // simulate api call
     await new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -79,13 +83,13 @@ const HookMultiStepForm = () => {
       .catch(({ message: errorMessage, errorKey }) => {
         if (
           errorKey &&
-          Object.values(StepperFormKeys)
+          Object.values(STEPPER_FORM_KEYS)
             .flatMap((fieldNames) => fieldNames)
             .includes(errorKey)
         ) {
           let erroredStep: number;
           // get the step number based on input name
-          for (const [key, value] of Object.entries(StepperFormKeys)) {
+          for (const [key, value] of Object.entries(STEPPER_FORM_KEYS)) {
             if (value.includes(errorKey as never)) {
               erroredStep = Number(key);
             }
